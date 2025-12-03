@@ -21,6 +21,7 @@ lite-xl*
 LiteXL*
 
 !subprojects/packagefiles/
+!subprojects/packagefiles/**/*.diff
 !resources/windows/*.diff
 !resources/windows/*.exe.manifest.in
 !resources/macos/*.py
