@@ -72,10 +72,12 @@ static void get_exe_filename(char *buf, int sz) {
 #endif
 
 #ifdef SDL_PLATFORM_APPLE
+extern "C" {
 void enable_momentum_scroll();
 #ifdef MACOS_USE_BUNDLE
 void set_macos_bundle_resources(lua_State *L);
 #endif
+}
 #endif
 
 #ifndef LITE_ARCH_TUPLE

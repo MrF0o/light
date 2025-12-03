@@ -76,8 +76,8 @@ if get_option('portable') or host_machine.system() == 'windows'
     lpm_userdir = 'data'
     lpm_install_dir = '/'
     configure_file(
-        input: 'resources' / 'windows' / 'lite-xl.exe.manifest.in',
-        output: 'lite-xl.exe.manifest',
+        input: 'resources' / 'windows' / 'light.exe.manifest.in',
+        output: 'light.exe.manifest',
         configuration: conf_data
     )
 elif get_option('bundle') and host_machine.system() == 'darwin'
