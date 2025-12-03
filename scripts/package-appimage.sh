@@ -67,30 +67,30 @@ setup_appimagetool() {
 generate_appimage() {
   [[ ! -e $BUILD_DIR ]] && scripts/build.sh $@
 
-  if [ -e LiteXL.AppDir ]; then
-    rm -rf LiteXL.AppDir
+  if [ -e Light.AppDir ]; then
+    rm -rf Light.AppDir
   fi
 
-  echo "Creating LiteXL.AppDir..."
+  echo "Creating Light.AppDir..."
 
-  DESTDIR="$(realpath LiteXL.AppDir)" meson install -C ${BUILD_DIR}
+  DESTDIR="$(realpath Light.AppDir)" meson install -C ${BUILD_DIR}
 
-  cp resources/icons/lite-xl.svg LiteXL.AppDir/
-  cp resources/linux/com.lite_xl.LiteXL.desktop LiteXL.AppDir/
+  cp resources/icons/light.svg Light.AppDir/
+  cp resources/linux/com.light.Light.desktop Light.AppDir/
 
   # https://github.com/lite-xl/lite-xl/issues/1912
-  mkdir -p ./LiteXL.AppDir/usr/share/../bin
-  mv ./LiteXL.AppDir/lite-xl ./LiteXL.AppDir/usr/bin
-  mv ./LiteXL.AppDir/data ./LiteXL.AppDir/usr/share/lite-xl
-  rm -rf ./LiteXL.AppDir/lib64 ./LiteXL.AppDir/include
+  mkdir -p ./Light.AppDir/usr/share/../bin
+  mv ./Light.AppDir/light ./Light.AppDir/usr/bin
+  mv ./Light.AppDir/data ./Light.AppDir/usr/share/light
+  rm -rf ./Light.AppDir/lib64 ./Light.AppDir/include
 
   echo "Creating AppRun..."
-	cat >> LiteXL.AppDir/AppRun <<- 'EOF'
+	cat >> Light.AppDir/AppRun <<- 'EOF'
 	#!/bin/sh
 	CURRENTDIR="$(dirname "$(readlink -f "$0")")"
-	exec "$CURRENTDIR/usr/bin/lite-xl" "$@"
+	exec "$CURRENTDIR/usr/bin/light" "$@"
 	EOF
-  chmod +x LiteXL.AppDir/AppRun
+  chmod +x Light.AppDir/AppRun
 
   echo "Generating AppImage..."
   local version=""
@@ -98,8 +98,8 @@ generate_appimage() {
     version="-$VERSION"
   fi
 
-  APPIMAGE_EXTRACT_AND_RUN=1 ./appimagetool LiteXL.AppDir LiteXL${version}-${ARCH}-linux.AppImage
-  rm -rf LiteXL.AppDir
+  APPIMAGE_EXTRACT_AND_RUN=1 ./appimagetool Light.AppDir Light${version}-${ARCH}-linux.AppImage
+  rm -rf Light.AppDir
 }
 
 setup_appimagetool

@@ -1,4 +1,4 @@
-project('lite-xl',
+project('light',
     ['c', 'cpp'],
     version : '2.1.7',
     license : 'MIT',
@@ -101,9 +101,9 @@ elif get_option('bundle') and host_machine.system() == 'darwin'
     )
 else
     lite_bindir = 'bin'
-    lite_docdir = get_option('datadir') / 'doc' / 'lite-xl'
-    lite_datadir = get_option('datadir') / 'lite-xl'
-    lpm_userdir = 'lite-xl'
+    lite_docdir = get_option('datadir') / 'doc' / 'light'
+    lite_datadir = get_option('datadir') / 'light'
+    lpm_userdir = 'light'
     lpm_install_dir = get_option('datadir')
     if host_machine.system() == 'linux'
         git_command = find_program('git', required : false)
@@ -146,15 +146,15 @@ else
             conf_data.set('METAINFO_RELEASES', '')
         endif
 
-        install_data('resources' / 'icons' / 'lite-xl.svg',
+        install_data('resources' / 'icons' / 'light.svg',
             install_dir : get_option('datadir') / 'icons' / 'hicolor' / 'scalable' / 'apps'
         )
-        install_data('resources' / 'linux' / 'com.lite_xl.LiteXL.desktop',
+        install_data('resources' / 'linux' / 'com.light.Light.desktop',
             install_dir : get_option('datadir') / 'applications'
         )
         configure_file(
-            input : 'resources' / 'linux' / 'com.lite_xl.LiteXL.metainfo.xml.in',
-            output : 'com.lite_xl.LiteXL.metainfo.xml',
+            input : 'resources' / 'linux' / 'com.light.Light.metainfo.xml.in',
+            output : 'com.light.Light.metainfo.xml',
             configuration : conf_data,
             install : true,
             install_dir : 'share/metainfo'

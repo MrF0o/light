@@ -77,10 +77,10 @@ main() {
 
   [[ ! -e $build_dir ]] && scripts/build.sh $@
 
-  output="lite-xl-${version}-${arch_file}-windows-setup"
+  output="light-${version}-${arch_file}-windows-setup"
 
   "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" -dARCH=$arch //F"${output}" "${build_dir}/scripts/innosetup.iss"
-  pushd "${build_dir}/scripts"; mv lite-xl*.exe "./../../"; popd
+  pushd "${build_dir}/scripts"; mv light*.exe "./../../"; popd
 }
 
 main "$@"

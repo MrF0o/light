@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Lite XL
-Comment=A lightweight text editor written in Lua
+Comment=A text editor
 Exec=lite-xl %F
 Icon=lite-xl
 Terminal=false

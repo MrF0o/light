@@ -70,7 +70,7 @@ main() {
   local reconfigure
   local lpm_path
   local should_reconfigure
-  local destdir="lite-xl"
+  local destdir="light"
 
   for i in "$@"; do
     case $i in
@@ -247,7 +247,7 @@ main() {
       -DSDL_DBUS=ON -DSDL_IBUS=ON -DSDL_AUDIO=OFF -DSDL_GPU=OFF -DSDL_RPATH=OFF -DSDL_PIPEWIRE=OFF \
       -DSDL_CAMERA=OFF -DSDL_JOYSTICK=OFF -DSDL_HAPTIC=OFF -DSDL_HIDAPI=OFF -DSDL_DIALOG=ON \
       -DSDL_POWER=OFF -DSDL_SENSOR=OFF -DSDL_VULKAN=OFF -DSDL_LIBUDEV=OFF -DSDL_SHARED=OFF -DSDL_STATIC=ON \
-      -DSDL_X11=ON -DSDL_WAYLAND=ON -DSDL_TESTS=OFF -DSDL_EXAMPLES=OFF -DSDL_VENDOR_INFO=lite-xl
+      -DSDL_X11=ON -DSDL_WAYLAND=ON -DSDL_TESTS=OFF -DSDL_EXAMPLES=OFF -DSDL_VENDOR_INFO=light
     cmake --build "SDL3-$sdl3_version/build" && cmake --install "SDL3-$sdl3_version/build"
     pkg_config_path="--pkg-config-path=$(pwd -P)/prefix/lib/pkgconfig"
     popd
@@ -285,14 +285,14 @@ main() {
 
   if [[ $pgo != "" ]]; then
     cp -r data "${build_dir}/src"
-    "${build_dir}/src/lite-xl"
+    "${build_dir}/src/light"
     meson configure -Db_pgo=use "${build_dir}"
     meson compile -C "${build_dir}"
     rm -fr "${build_dir}/src/data"
   fi
 
   meson install -C "${build_dir}" --destdir "$destdir" \
-    --skip-subprojects=freetype2,lua,pcre2 --no-rebuild
+    --skip-subprojects=freetype2,lua,pcre2,luajit --no-rebuild
 }
 
 main "$@"
