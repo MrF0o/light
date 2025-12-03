@@ -175,7 +175,7 @@ jobs:
   build_linux:
     name: Linux (x86_64)
     needs: [version]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
 
@@ -186,7 +186,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y meson ninja-build libfreetype6-dev libpcre2-dev
+          sudo apt-get install -y meson ninja-build libfreetype6-dev libpcre2-dev gcc-14 g++-14
 
       - name: Setup SDL
         uses: libsdl-org/setup-sdl@main
@@ -195,6 +195,9 @@ jobs:
           install-linux-dependencies: true
 
       - name: Build
+        env:
+          CC: gcc-14
+          CXX: g++-14
         run: bash scripts/build.sh --addons --debug --forcefallback --lto --portable --mode ${{ needs.version.outputs.buildtype }} -b build
 
       - name: Package Linux (Portable)
@@ -290,7 +293,6 @@ jobs:
       - name: Set environment variables
         run: |
           echo "PKG_CONFIG=C:\vcpkg\installed\x64-windows-release\tools\pkgconf\pkgconf.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "CC_LD=$((Get-Command link.exe).Source)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build
         run: bash scripts/build.sh --addons --debug --forcefallback --lto --portable --mode ${{ needs.version.outputs.buildtype }} -b build
