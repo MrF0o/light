@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=Lite XL
-Comment=A text editor
-Exec=lite-xl %F
-Icon=lite-xl
+Name=Light
+Comment=An editor
+Exec=light %F
+Icon=light
 Terminal=false
-StartupWMClass=lite-xl
+StartupWMClass=light
 Categories=Development;IDE;
 MimeType=text/plain;inode/directory;
