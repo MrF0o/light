@@ -46,7 +46,9 @@ cc = meson.get_compiler('c')
 lite_includes = []
 lite_cargs = [
     '-DPCRE2_STATIC',
-    '-DLITE_PROJECT_VERSION_STR="@0@"'.format(version)
+    '-DLITE_PROJECT_VERSION_STR="@0@"'.format(version),
+    '-DLITE_BUILD_DIR="@0@"'.format(meson.current_build_dir()),
+    '-DLITE_SOURCE_DIR="@0@"'.format(meson.current_source_dir()),
 ]
 # On macos we need to use the SDL renderer to support retina displays
 if get_option('renderer') or host_machine.system() == 'darwin'

@@ -14,6 +14,12 @@ if MACOS_RESOURCES then
 else
   local prefix = os.getenv('LIGHT_PREFIX') or EXEDIR:match("^(.+)[/\\]bin$")
   DATADIR = prefix and (prefix .. PATHSEP .. 'share' .. PATHSEP .. 'light') or (EXEDIR .. PATHSEP .. 'data')
+  if not system.get_file_info(DATADIR) then
+    local source_dir = "@PROJECT_SOURCE_DIR@"
+    if system.get_file_info(source_dir .. "/data") then
+      DATADIR = source_dir .. "/data"
+    end
+  end
 end
 USERDIR = (system.get_file_info(EXEDIR .. PATHSEP .. 'user') and (EXEDIR .. PATHSEP .. 'user'))
        or os.getenv("LIGHT_USERDIR")
