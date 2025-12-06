@@ -44,6 +44,7 @@ local function set_scale(scale)
 
   if config.plugins.scale.mode == "ui" then
     SCALE = scale
+    config.scale = scale
 
     style.padding.x               = style.padding.x               * s
     style.padding.y               = style.padding.y               * s

@@ -8,6 +8,7 @@ lite_sources = [
     'api/utf8.c',
     'api/api_clay.cpp',
     'api/api_view.cpp',
+    'api/Config.cpp',
     'arena_allocator.c',
     'clay_impl.c',
     'clay_renderer.cpp',

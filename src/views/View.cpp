@@ -1,25 +1,10 @@
 #include "View.hpp"
+#include "api/Config.hpp"
 #include <algorithm>
 #include <cmath>
 
-extern "C"
-{
-    // TODO: migrate core/config.lua to C++
-    extern bool g_config_transitions;
-    extern float g_config_fps;
-    extern float g_config_animation_rate;
-    extern bool g_config_animate_drag_scroll;
-}
-
 namespace view
 {
-
-    // TODO: This would interface with Lua's config.disabled_transitions table
-    static bool isTransitionDisabled(const std::string &name)
-    {
-        // TODO: Query Lua config.disabled_transitions[name]
-        return false;
-    }
 
     View::View()
     {
@@ -104,11 +89,10 @@ namespace view
                 if (result != 1.0f)
                 {
                     scroll.to.y = result * (getScrollableSize() - size.y);
-                    // TODO: Check g_config_animate_drag_scroll from Lua
-                    // if (!g_config_animate_drag_scroll) {
-                    //   clampScrollPosition();
-                    //   scroll.y = scroll.to.y;
-                    // }
+                    if (!ConfigManager::instance().animate_drag_scroll) {
+                      clampScrollPosition();
+                      scroll.y = scroll.to.y;
+                    }
                 }
                 hScrollbar->onMouseLeft();
                 return true;
@@ -121,7 +105,10 @@ namespace view
             if (result != 1.0f)
             {
                 scroll.to.x = result * (getHScrollableSize() - size.x);
-                // TODO: Check g_config_animate_drag_scroll
+                if (!ConfigManager::instance().animate_drag_scroll) {
+                    clampScrollPosition();
+                    scroll.x = scroll.to.x;
+                }
             }
             return true;
         }
@@ -253,11 +240,11 @@ namespace view
     {
         float diff = std::abs(value - target);
 
-        // TODO: Get these from Lua config
-        bool transitions = true; // g_config_transitions
-        bool disabled = isTransitionDisabled(name);
-        float fps = 60.0f;           // g_config_fps
-        float animation_rate = 1.0f; // g_config_animation_rate
+        NativeConfig& config = ConfigManager::instance();
+        bool transitions = config.transitions;
+        bool disabled = ConfigManager::isTransitionDisabled(name);
+        float fps = config.fps;
+        float animation_rate = config.animation_rate;
 
         if (!transitions || diff < 0.5f || disabled)
         {
@@ -279,7 +266,6 @@ namespace view
         if (diff > 1e-8f)
         {
             needsRedraw = true;
-            // TODO: Set core.redraw = true in Lua
         }
     }
 
@@ -302,8 +288,7 @@ namespace view
 
     void View::update()
     {
-        // TODO: Get SCALE from Lua global
-        float newScale = 1.0f; // TODO: Get from Lua SCALE global
+        float newScale = ConfigManager::instance().scale;
         if (currentScale != newScale)
         {
             onScaleChange(newScale, currentScale);

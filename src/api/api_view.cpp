@@ -248,6 +248,16 @@ static int l_view_update(lua_State *L)
 {
   View *view = checkview(L, 1);
   view->update();
+  if (view->checkAndResetRedraw())
+  {
+    lua_getglobal(L, "core");
+    if (lua_istable(L, -1))
+    {
+      lua_pushboolean(L, true);
+      lua_setfield(L, -2, "redraw");
+    }
+    lua_pop(L, 1);
+  }
   return 0;
 }
 

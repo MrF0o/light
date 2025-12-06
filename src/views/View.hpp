@@ -98,6 +98,12 @@ namespace view
     lua_State *L = nullptr;
     int luaRef = LUA_NOREF;
 
+    bool checkAndResetRedraw() {
+        bool ret = needsRedraw;
+        needsRedraw = false;
+        return ret;
+    }
+
   protected:
     void setScrollable(bool value);
 

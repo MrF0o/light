@@ -9,6 +9,12 @@
 #define API_TYPE_NATIVE_PLUGIN "NativePlugin"
 #define API_TYPE_RENWINDOW "RenWindow"
 
+#ifdef _WIN32
+  #define API_EXPORT __declspec(dllexport)
+#else
+  #define API_EXPORT __attribute__((visibility("default")))
+#endif
+
 #define API_CONSTANT_DEFINE(L, idx, key, n) \
   (lua_pushnumber(L, n), lua_setfield(L, idx - 1, key))
 
