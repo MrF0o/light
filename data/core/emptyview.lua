@@ -1,10 +1,10 @@
 local core = require "core"
 local style = require "core.style"
 local keymap = require "core.keymap"
-local View = require "core.view"
+local View = require "core.view_native"
 
----@class core.emptyview : core.view
----@field super core.view
+---@class core.emptyview : core.view_native
+---@field super core.view_native
 local EmptyView = View:extend()
 
 function EmptyView:__tostring() return "EmptyView" end

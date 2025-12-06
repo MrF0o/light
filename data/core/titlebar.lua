@@ -1,7 +1,7 @@
 local core = require "core"
 local common = require "core.common"
 local style = require "core.style"
-local View = require "core.view"
+local View = require "core.view_native"
 local ContextMenu = require "core.contextmenu"
 local command = require "core.command"
 
