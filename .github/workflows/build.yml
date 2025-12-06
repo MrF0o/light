@@ -49,7 +49,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -91,7 +91,7 @@ jobs:
 #           gcc -v
 #           xcodebuild -version
 
-#       - uses: actions/checkout@v5
+#       - uses: actions/checkout@v6
 
 #       - name: Python Setup
 #         uses: actions/setup-python@v6
@@ -125,7 +125,7 @@ jobs:
 #     needs: [version, build_darwin]
 #     runs-on: macos-15
 #     steps:
-#       - uses: actions/checkout@v5
+#       - uses: actions/checkout@v6
 
 #       - name: Python Setup
 #         uses: actions/setup-python@v6
@@ -177,7 +177,7 @@ jobs:
     needs: [version]
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -238,7 +238,7 @@ jobs:
 #             pkg-config:p
 #             ca-certificates:p
 
-#       - uses: actions/checkout@v5
+#       - uses: actions/checkout@v6
 
 #       - name: Build
 #         run: bash scripts/build.sh --addons --debug --forcefallback --lto --portable --mode ${{ needs.version.outputs.buildtype }} -b build
@@ -263,7 +263,7 @@ jobs:
 #     needs: [version]
 #     runs-on: windows-latest
 #     steps:
-#       - uses: actions/checkout@v5
+#       - uses: actions/checkout@v6
 
 #       - name: Setup MSVC
 #         id: msvc-dev-cmd
@@ -319,7 +319,7 @@ jobs:
 #     permissions:
 #       contents: write
 #     steps:
-#       - uses: actions/checkout@v5
+#       - uses: actions/checkout@v6
 #       - name: Download Artifacts
 #         uses: actions/download-artifact@v6
 #         with:
