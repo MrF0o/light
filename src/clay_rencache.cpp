@@ -9,11 +9,28 @@ extern "C" {
 namespace clay {
 
 bool ClayRencache::initialized = false;
+static std::vector<FontGroup> fontRegistry;
 
 void ClayRencache::Initialize() {
     if (!initialized) {
         initialized = true;
     }
+}
+
+uint16_t ClayRencache::AddFont(const FontGroup& fontGroup) {
+    fontRegistry.push_back(fontGroup);
+    return static_cast<uint16_t>(fontRegistry.size() - 1);
+}
+
+FontGroup* ClayRencache::GetFont(uint16_t id) {
+    if (id < fontRegistry.size()) {
+        return &fontRegistry[id];
+    }
+    return nullptr;
+}
+
+void ClayRencache::ResetFonts() {
+    fontRegistry.clear();
 }
 
 // this function will check if bounding box intersects with clip rectangle
@@ -28,7 +45,7 @@ bool ClayRencache::ShouldRender(const Clay_BoundingBox& box, const Clay_Bounding
 
 void ClayRencache::RenderThroughRencache(RenWindow* window, const Clay_RenderCommandArray& commands) {
     if (!window) {
-        std::println("Error: No window provided to Clay rencache rendering");
+        fprintf(stderr, "Error: No window provided to Clay rencache rendering\n");
         return;
     }
     
@@ -120,22 +137,17 @@ void ClayRencache::RenderThroughRencache(RenWindow* window, const Clay_RenderCom
             }
             
             case CLAY_RENDER_COMMAND_TYPE_TEXT: {
-                // TBD: implement text rendering through rencache
                 const auto& data = cmd->renderData.text;
-                
-                RenRect rect = {
-                    static_cast<int>(cmd->boundingBox.x),
-                    static_cast<int>(cmd->boundingBox.y),
-                    static_cast<int>(cmd->boundingBox.width),
-                    static_cast<int>(cmd->boundingBox.height)
-                };
-                RenColor color = {
-                    static_cast<uint8_t>(data.textColor.b),
-                    static_cast<uint8_t>(data.textColor.g),
-                    static_cast<uint8_t>(data.textColor.r),
-                    static_cast<uint8_t>(data.textColor.a * 0.2)
-                };
-                rencache_draw_rect(window, rect, color);
+                FontGroup* group = GetFont(data.fontId);
+                if (group) {
+                    RenColor color = {
+                        static_cast<uint8_t>(data.textColor.b),
+                        static_cast<uint8_t>(data.textColor.g),
+                        static_cast<uint8_t>(data.textColor.r),
+                        static_cast<uint8_t>(data.textColor.a)
+                    };
+                    rencache_draw_text(window, group->fonts.data(), data.stringContents.chars, data.stringContents.length, cmd->boundingBox.x, cmd->boundingBox.y, color, {0});
+                }
                 break;
             }
             

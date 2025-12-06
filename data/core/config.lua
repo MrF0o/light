@@ -1,6 +1,70 @@
 local common = require "core.common"
+local ffi = require "ffi"
 
-local config = {}
+ffi.cdef[[
+  typedef struct {
+    double fps;
+    double animation_rate;
+    double blink_period;
+    bool transitions;
+    bool animate_drag_scroll;
+    bool disable_blink;
+    float scale;
+  } NativeConfig;
+  NativeConfig* api_get_native_config();
+  void api_set_transition_disabled(const char* name, bool disabled);
+]]
+
+local native_config = ffi.C.api_get_native_config()
+if rawget(_G, "SCALE") then
+  native_config.scale = SCALE
+end
+
+local config_impl = {}
+local disabled_transitions_impl = {}
+local disabled_transitions_proxy = setmetatable({}, {
+  __index = disabled_transitions_impl,
+  __newindex = function(t, k, v)
+    disabled_transitions_impl[k] = v
+    ffi.C.api_set_transition_disabled(k, v)
+  end,
+  __pairs = function() return pairs(disabled_transitions_impl) end
+})
+
+local config = setmetatable({}, {
+  __index = function(t, k)
+    if k == "fps" then return native_config.fps end
+    if k == "animation_rate" then return native_config.animation_rate end
+    if k == "blink_period" then return native_config.blink_period end
+    if k == "transitions" then return native_config.transitions end
+    if k == "animate_drag_scroll" then return native_config.animate_drag_scroll end
+    if k == "disable_blink" then return native_config.disable_blink end
+    if k == "scale" then return native_config.scale end
+    return config_impl[k]
+  end,
+  __newindex = function(t, k, v)
+    if k == "fps" then native_config.fps = v end
+    if k == "animation_rate" then native_config.animation_rate = v end
+    if k == "blink_period" then native_config.blink_period = v end
+    if k == "transitions" then native_config.transitions = v end
+    if k == "animate_drag_scroll" then native_config.animate_drag_scroll = v end
+    if k == "disable_blink" then native_config.disable_blink = v end
+    if k == "scale" then native_config.scale = v end
+    
+    if k == "disabled_transitions" then
+      if type(v) == "table" then
+        for dk, dv in pairs(v) do
+          disabled_transitions_proxy[dk] = dv
+        end
+      end
+      config_impl[k] = disabled_transitions_proxy
+      return
+    end
+    
+    config_impl[k] = v
+  end,
+  __pairs = function() return pairs(config_impl) end
+})
 
 ---The frame rate of Lite XL.
 ---Note that setting this value to the screen's refresh rate
