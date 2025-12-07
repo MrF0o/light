@@ -85,7 +85,7 @@ end
 function ContextMenu:show(x, y, items, ...)
   local items_list = { width = 0, height = 0, arguments = { ... } }
   for _, item in ipairs(items) do
-    if item and (not item.command or command.is_valid(item.command, ...)) then
+    if item then
       table.insert(items_list, item)
     end
   end
@@ -100,6 +100,14 @@ function ContextMenu:show(x, y, items, ...)
     y = common.clamp(y, 0, core.root_view.size.y - h)
 
     self.position.x, self.position.y = x, y
+    
+    -- If menu is already visible (switching between menus), reset height immediately
+    if not self.visible then
+      self.height = 0
+    else
+      self.height = h
+    end
+    
     self.visible = true
     core.set_active_view(self)
     core.request_cursor("arrow")
