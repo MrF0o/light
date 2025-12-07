@@ -1,3 +1,8 @@
+## Light editor
+
+![light editor](./resources/screenshot.png)
+
+
 > *a fork of [Lite XL](https://github.com/lite-xl/lite-xl)*
 
 

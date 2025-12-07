@@ -443,9 +443,9 @@ static int l_clay_render(lua_State *L) {
 
   Clay_RenderCommandArray commands = Clay_EndLayout();
 
-  rencache_begin_frame(window);
+  // rencache_begin_frame(window);
   clay::g_clay_renderer->RenderCommands(commands);
-  rencache_end_frame(window);
+  // rencache_end_frame(window);
 
   lua_pushinteger(L, commands.length);
   return 1;
