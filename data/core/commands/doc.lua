@@ -19,14 +19,14 @@ local function doc_multiline_selections(sort)
     idx, line1, col1, line2, col2 = iter(state, idx)
     if idx and line2 > line1 and col2 == 1 then
       line2 = line2 - 1
-      col2 = #doc().lines[line2]
+      col2 = #doc().buffer:get_line(line2)
     end
     return idx, line1, col1, line2, col2
   end
 end
 
 local function append_line_if_last_line(line)
-  if line >= #doc().lines then
+  if line >= doc().buffer:line_count() then
     doc():insert(line, math.huge, "\n")
   end
 end
@@ -72,13 +72,13 @@ local function cut_or_copy(delete)
       end
     else -- Cut/copy whole line
       -- Remove newline from the text. It will be added as needed on paste.
-      text = string.sub(doc().lines[line1], 1, -2)
+      text = string.sub(doc().buffer:get_line(line1), 1, -2)
       full_text = full_text == "" and text .. "\n" or (text .. "\n" .. full_text)
       core.cursor_clipboard_whole_line[idx] = true
       if delete then
-        if line1 < #doc().lines then
+        if line1 < doc().buffer:line_count() then
           doc():remove(line1, 1, line1 + 1, 1)
-        elseif #doc().lines == 1 then
+        elseif doc().buffer:line_count() == 1 then
           doc():remove(line1, 1, line1, math.huge)
         else
           doc():remove(line1 - 1, math.huge, line1, math.huge)
@@ -106,7 +106,7 @@ local function split_cursor(dv, direction)
     and DocView.translate.previous_line
     or DocView.translate.next_line
   for _, line1, col1 in dv.doc:get_selections() do
-    if line1 + direction >= 1 and line1 + direction <= #dv.doc.lines then
+    if line1 + direction >= 1 and line1 + direction <= dv.doc.buffer:line_count() then
       table.insert(new_cursors, { dv_translate(dv.doc, line1, col1, dv) })
     end
   end
@@ -138,7 +138,7 @@ local function line_comment(comment, line1, col1, line2, col2)
   local uncomment = true
   local start_offset = math.huge
   for line = line1, line2 do
-    local text = doc().lines[line]
+    local text = doc().buffer:get_line(line)
     local s = text:find("%S")
     if s then
       local cs, ce = text:find(start_comment, s, true)
@@ -149,9 +149,9 @@ local function line_comment(comment, line1, col1, line2, col2)
     end
   end
 
-  local end_line = col2 == #doc().lines[line2]
+  local end_line = col2 == #doc().buffer:get_line(line2)
   for line = line1, line2 do
-    local text = doc().lines[line]
+    local text = doc().buffer:get_line(line)
     local s = text:find("%S")
     if s and uncomment then
       if end_comment and text:sub(#text - #end_comment, #text - 1) == end_comment then
@@ -164,7 +164,7 @@ local function line_comment(comment, line1, col1, line2, col2)
     elseif s then
       doc():insert(line, start_offset, start_comment)
       if end_comment then
-        doc():insert(line, #doc().lines[line], " " .. comment[2])
+        doc():insert(line, #doc().buffer:get_line(line), " " .. comment[2])
       end
     end
   end
@@ -318,12 +318,12 @@ local commands = {
 
   ["doc:newline"] = function(dv)
     for idx, line, col in dv.doc:get_selections(false, true) do
-      local indent = dv.doc.lines[line]:match("^[\t ]*")
+      local indent = dv.doc.buffer:get_line(line):match("^[\t ]*")
       if col <= #indent then
         indent = indent:sub(#indent + 2 - col)
       end
       -- Remove current line if it contains only whitespace
-      if not config.keep_newline_whitespace and dv.doc.lines[line]:match("^%s+$") then
+      if not config.keep_newline_whitespace and dv.doc.buffer:get_line(line):match("^%s+$") then
         dv.doc:remove(line, 1, line, math.huge)
       end
       dv.doc:text_input("\n" .. indent, idx)
@@ -332,7 +332,7 @@ local commands = {
 
   ["doc:newline-below"] = function(dv)
     for idx, line in dv.doc:get_selections(false, true) do
-      local indent = dv.doc.lines[line]:match("^[\t ]*")
+      local indent = dv.doc.buffer:get_line(line):match("^[\t ]*")
       dv.doc:insert(line, math.huge, "\n" .. indent)
       dv.doc:set_selections(idx, line + 1, math.huge)
     end
@@ -340,7 +340,7 @@ local commands = {
 
   ["doc:newline-above"] = function(dv)
     for idx, line in dv.doc:get_selections(false, true) do
-      local indent = dv.doc.lines[line]:match("^[\t ]*")
+      local indent = dv.doc.buffer:get_line(line):match("^[\t ]*")
       dv.doc:insert(line, 1, indent .. "\n")
       dv.doc:set_selections(idx, line, math.huge)
     end
@@ -348,7 +348,7 @@ local commands = {
 
   ["doc:delete"] = function(dv)
     for idx, line1, col1, line2, col2 in dv.doc:get_selections(true, true) do
-      if line1 == line2 and col1 == col2 and dv.doc.lines[line1]:find("^%s*$", col1) then
+      if line1 == line2 and col1 == col2 and dv.doc.buffer:get_line(line1):find("^%s*$", col1) then
         dv.doc:remove(line1, col1, line1, math.huge)
       end
       dv.doc:delete_to_cursor(idx, translate.next_char)
@@ -376,8 +376,8 @@ local commands = {
     -- avoid triggering DocView:scroll_to_make_visible
     dv.last_line1 = 1
     dv.last_col1 = 1
-    dv.last_line2 = #dv.doc.lines
-    dv.last_col2 = #dv.doc.lines[#dv.doc.lines]
+    dv.last_line2 = dv.doc.buffer:line_count()
+    dv.last_col2 = #dv.doc.buffer:get_line(dv.doc.buffer:line_count())
   end,
 
   ["doc:select-lines"] = function(dv)
@@ -452,7 +452,7 @@ local commands = {
     for idx, line1, col1, line2, col2 in doc_multiline_selections(true) do
       append_line_if_last_line(line2)
       if line1 > 1 then
-        local text = doc().lines[line1 - 1]
+        local text = doc().buffer:get_line(line1 - 1)
         dv.doc:insert(line2 + 1, 1, text)
         dv.doc:remove(line1 - 1, 1, line1, 1)
         dv.doc:set_selections(idx, line1 - 1, col1, line2 - 1, col2)
@@ -463,8 +463,8 @@ local commands = {
   ["doc:move-lines-down"] = function(dv)
     for idx, line1, col1, line2, col2 in doc_multiline_selections(true) do
       append_line_if_last_line(line2 + 1)
-      if line2 < #dv.doc.lines then
-        local text = dv.doc.lines[line2 + 1]
+      if line2 < dv.doc.buffer:line_count() then
+        local text = dv.doc.buffer:get_line(line2 + 1)
         dv.doc:remove(line2 + 1, 1, line2 + 2, 1)
         dv.doc:insert(line1, 1, text)
         dv.doc:set_selections(idx, line1 + 1, col1, line2 + 1, col2)
@@ -498,7 +498,7 @@ local commands = {
       -- if nothing is selected, toggle the whole line
       if line1 == line2 and col1 == col2 then
         col1 = 1
-        col2 = #dv.doc.lines[line2]
+        col2 = #dv.doc.buffer:get_line(line2)
       end
       dv.doc:set_selections(idx, block_comment(comment, line1, col1, line2, col2))
     end
@@ -541,7 +541,8 @@ local commands = {
       if items then return end
       items = {}
       local mt = { __tostring = function(x) return x.text end }
-      for i, line in ipairs(dv.doc.lines) do
+      for i=1, dv.doc.buffer:line_count() do
+        local line = dv.doc.buffer:get_line(i)
         local item = { text = line:sub(1, -2), line = i, info = "line: " .. i }
         table.insert(items, setmetatable(item, mt))
       end
