@@ -347,4 +347,4 @@ namespace buffer
         return count;
     }
 
-} // namespace light
+} // namespace buffer
