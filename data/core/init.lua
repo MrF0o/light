@@ -15,9 +15,6 @@ local NagView
 local DocView
 local Doc
 local Project
-
--- Clay UI integration
-local clay = require "clay"
 local renwindow = require "renwindow"
 
 local core = {}

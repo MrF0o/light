@@ -227,7 +227,7 @@ function StatusView:register_docview_items()
       local ntabs = 0
       local last_idx = 0
       while last_idx < col do
-        local s, e = string.find(dv.doc.lines[line], "\t", last_idx, true)
+        local s, e = string.find(dv.doc.buffer:get_line(line), "\t", last_idx, true)
         if s and s < col then
           ntabs = ntabs + 1
           last_idx = e + 1
@@ -254,7 +254,7 @@ function StatusView:register_docview_items()
       local dv = core.active_view
       local line = dv.doc:get_selection()
       return {
-        string.format("%.f%%", line / #dv.doc.lines * 100)
+        string.format("%.f%%", line / dv.doc.buffer:line_count() * 100)
       }
     end,
     tooltip = "caret position"
@@ -327,7 +327,7 @@ function StatusView:register_docview_items()
     get_item = function()
       local dv = core.active_view
       return {
-        style.text, #dv.doc.lines, " lines",
+        style.text, dv.doc.buffer:line_count(), " lines",
       }
     end,
     separator = self.separator2
