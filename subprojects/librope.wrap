@@ -1,7 +1,8 @@
 [wrap-git]
-url = https://github.com/josephg/librope.git
+url = https://github.com/MrF0o/librope.git
 revision = head
 depth = 1
+patch_directory = librope
 
 [provide]
 librope = librope_dep

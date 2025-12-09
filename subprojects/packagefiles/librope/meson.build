@@ -2,11 +2,13 @@ project('librope', 'c',
   version: '0.1.0',
   license: 'MIT',
   default_options: [
-    'c_std=c11',
+    'c_std=c99',
     'warning_level=0',
     'werror=false'
   ]
 )
+
+add_project_arguments('-D_GNU_SOURCE', language: 'c')
 
 librope_sources = files(
   'rope.c',
