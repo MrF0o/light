@@ -135,7 +135,7 @@ namespace core
         {
             float diff = std::abs(value - target);
 
-            NativeConfig &config = ConfigManager::instance();
+            Config &config = ConfigManager::instance();
             bool transitions = config.transitions;
             bool disabled = ConfigManager::isTransitionDisabled(name);
             float fps = config.fps;

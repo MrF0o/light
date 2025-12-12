@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include "api/api.h"
 
-struct NativeConfig {
+struct Config {
     double fps = 60.0;
     double animation_rate = 1.0;
     double blink_period = 0.8;
@@ -17,8 +17,8 @@ struct NativeConfig {
 
 class ConfigManager {
 public:
-    static NativeConfig& instance() {
-        static NativeConfig config;
+    static Config& instance() {
+        static Config config;
         return config;
     }
 
@@ -30,7 +30,7 @@ private:
 };
 
 extern "C" {
-    API_EXPORT NativeConfig* api_get_native_config();
+    API_EXPORT Config* api_get_native_config();
     API_EXPORT void api_set_transition_disabled(const char* name, bool disabled);
 }
 

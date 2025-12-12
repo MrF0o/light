@@ -15,7 +15,7 @@ void ConfigManager::setTransitionDisabled(const std::string& name, bool disabled
 }
 
 extern "C" {
-    API_EXPORT NativeConfig* api_get_native_config() {
+    API_EXPORT Config* api_get_native_config() {
         return &ConfigManager::instance();
     }
 

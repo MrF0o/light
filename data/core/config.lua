@@ -10,8 +10,8 @@ ffi.cdef[[
     bool animate_drag_scroll;
     bool disable_blink;
     float scale;
-  } NativeConfig;
-  NativeConfig* api_get_native_config();
+  } Config;
+  Config* api_get_native_config();
   void api_set_transition_disabled(const char* name, bool disabled);
 ]]
 
