@@ -753,6 +753,7 @@ end
 function core.root_project()
     return core.projects[1]
 end
+
 function core.project_for_path(path)
     for i, project in ipairs(core.projects) do
         if project.path:find(path, 1, true) then
@@ -761,11 +762,13 @@ function core.project_for_path(path)
     end
     return nil
 end
+
 -- Legacy interface; do not use. Use a specific project instead. When in doubt, use root_project.
 function core.normalize_to_project_dir(path)
     core.deprecation_log("core.normalize_to_project_dir")
     return core.root_project():normalize_path(path)
 end
+
 function core.project_absolute_path(path)
     core.deprecation_log("core.project_absolute_path")
     return core.root_project() and core.root_project():absolute_path(path) or system.absolute_path(path)

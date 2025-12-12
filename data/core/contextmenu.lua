@@ -3,7 +3,7 @@ local common = require "core.common"
 local command = require "core.command"
 local keymap = require "core.keymap"
 local style = require "core.style"
-local View = require "core.view"
+local View = require "core.view_native"
 
 local border_width = 1
 local divider_width = 1

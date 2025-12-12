@@ -4,7 +4,7 @@ local common = require "core.common"
 local command = require "core.command"
 local style = require "core.style"
 local keymap = require "core.keymap"
-local View = require "core.view"
+local View = require "core.view_native"
 
 local ToolbarView = View:extend()
 

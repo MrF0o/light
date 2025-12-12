@@ -342,6 +342,7 @@ function RootView:on_mouse_moved(x, y, dx, dy)
       resize_child_node(node, "y", y, dy)
     end
     node.divider = common.clamp(node.divider, 0.01, 0.99)
+    core.redraw = true
     return
   end
 
@@ -518,6 +519,7 @@ function RootView:on_touch_moved(x, y, dx, dy, ...)
       resize_child_node(node, "y", y, dy)
     end
     node.divider = common.clamp(node.divider, 0.01, 0.99)
+    core.redraw = true
     return
   end
 

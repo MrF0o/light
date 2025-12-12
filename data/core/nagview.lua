@@ -2,7 +2,7 @@ local core = require "core"
 local command = require "core.command"
 local common = require "core.common"
 local config = require "core.config"
-local View = require "core.view"
+local View = require "core.view_native"
 local style = require "core.style"
 
 local BORDER_WIDTH = common.round(1 * SCALE)

@@ -8,7 +8,6 @@ int luaopen_process(lua_State *L);
 int luaopen_dirmonitor(lua_State* L);
 int luaopen_utf8extra(lua_State* L);
 int luaopen_clay(lua_State* L);
-int luaopen_view(lua_State* L);
 int luaopen_buffer(lua_State* L);
 
 static const luaL_Reg libs[] = {
@@ -20,7 +19,6 @@ static const luaL_Reg libs[] = {
   { "dirmonitor", luaopen_dirmonitor },
   { "utf8extra",  luaopen_utf8extra  },
   { "clay",       luaopen_clay       },
-  { "view",       luaopen_view       },
   { "buffer",     luaopen_buffer     },
   { NULL, NULL }
 };

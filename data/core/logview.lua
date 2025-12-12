@@ -3,7 +3,7 @@ local common = require "core.common"
 local config = require "core.config"
 local keymap = require "core.keymap"
 local style = require "core.style"
-local View = require "core.view"
+local View = require "core.view_native"
 
 
 local function lines(text)

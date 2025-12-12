@@ -4,7 +4,7 @@ local common = require "core.common"
 local keymap = require "core.keymap"
 local command = require "core.command"
 local style = require "core.style"
-local View = require "core.view"
+local View = require "core.view_native"
 
 ---@class plugins.projectsearch.resultsview : core.view
 local ResultsView = View:extend()

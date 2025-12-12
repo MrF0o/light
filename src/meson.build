@@ -7,7 +7,7 @@ lite_sources = [
     'api/process.c',
     'api/utf8.c',
     'api/api_clay.cpp',
-    'api/api_view.cpp',
+    'api/view_ffi.cpp',
     'api/Config.cpp',
     'api/buffer.cpp',
     'buf/RopeBuffer.cpp',
@@ -20,9 +20,8 @@ lite_sources = [
     'renwindow.c',
     'rencache.c',
     'main.cpp',
-    'views/Scrollbar.cpp',
-    'views/View.cpp',
-    'views/renviews/ViewRenderer.cpp',
+    'core/views/View.cpp',
+    'core/views/renviews/ViewRenderer.cpp',
 ]
 
 #===============================================================================

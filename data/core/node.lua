@@ -4,7 +4,7 @@ local config = require "core.config"
 local style = require "core.style"
 local Object = require "core.object"
 local EmptyView = require "core.emptyview"
-local View = require "core.view"
+local View = require "core.view_native"
 
 ---@class core.node : core.object
 local Node = Object:extend()
